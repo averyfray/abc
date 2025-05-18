@@ -1,0 +1,179 @@
+import java.util.*;
+
+public class WaterJugDFS {
+    
+    static class State {
+        int four, three;
+
+        State(int four, int three) {
+            this.four = four;
+            this.three = three;
+        }
+
+        @Override
+        public boolean equals(Object obj) {
+            if (this == obj) return true;
+            if (obj == null || getClass() != obj.getClass()) return false;
+            State state = (State) obj;
+            return four == state.four && three == state.three;
+        }
+
+        @Override
+        public int hashCode() {
+            return Objects.hash(four, three);
+        }
+
+        @Override
+        public String toString() {
+            return "(" + four + ", " + three + ")";
+        }
+    }
+
+    static Set<State> visited = new HashSet<>();
+    static List<State> solutionPath = new ArrayList<>();
+    static Random rand = new Random();
+
+    public static boolean dfsWaterJug(State current) {
+        if (visited.contains(current)) return false;
+        visited.add(current);
+        solutionPath.add(current);
+
+        if (current.four == 2) return true;
+
+        List<State> nextMoves = Arrays.asList(
+            new State(4, current.three), // Fill 4L
+            new State(current.four, 3),  // Fill 3L
+            new State(0, current.three), // Empty 4L
+            new State(current.four, 0),  // Empty 3L
+            new State(
+                Math.max(0, current.four - (3 - current.three)),
+                Math.min(3, current.three + current.four)
+            ), // Pour 4L -> 3L
+            new State(
+                Math.min(4, current.four + current.three),
+                Math.max(0, current.three - (4 - current.four))
+            ) // Pour 3L -> 4L
+        );
+
+        Collections.shuffle(nextMoves, rand); // Random order
+
+        for (State next : nextMoves) {
+            if (dfsWaterJug(next)) return true;
+        }
+
+        solutionPath.remove(solutionPath.size() - 1); // Backtrack
+        return false;
+    }
+
+    public static void main(String[] args) {
+        State initial = new State(0, 0);
+
+        if (dfsWaterJug(initial)) {
+            System.out.println("Solution found! Path:");
+            for (State state : solutionPath) {
+                System.out.println(state);
+            }
+        } else {
+            System.out.println("No solution found.");
+        }
+    }
+}
+
+
+
+Waterjar BFS
+import java.util.*;
+
+public class WaterJugBFS {
+
+    static class State {
+        int four, three;
+
+        State(int four, int three) {
+            this.four = four;
+            this.three = three;
+        }
+
+        // Needed for using State in HashSet and HashMap
+        @Override
+        public boolean equals(Object obj) {
+            if (this == obj) return true;
+            if (obj == null || getClass() != obj.getClass()) return false;
+            State other = (State) obj;
+            return four == other.four && three == other.three;
+        }
+
+        @Override
+        public int hashCode() {
+            return Objects.hash(four, three);
+        }
+    }
+
+    // To print the path from initial state to the goal
+    static void printPath(Map<State, State> parent, State goal) {
+        List<State> path = new ArrayList<>();
+        while (parent.containsKey(goal)) {
+            path.add(goal);
+            goal = parent.get(goal);
+        }
+        path.add(new State(0, 0)); // Start state
+
+        Collections.reverse(path);
+
+        for (State s : path) {
+            System.out.println("(" + s.four + ", " + s.three + ")");
+        }
+    }
+
+    static void bfsWaterJug() {
+        Queue<State> queue = new LinkedList<>();
+        Set<State> visited = new HashSet<>();
+        Map<State, State> parent = new HashMap<>();
+
+        State start = new State(0, 0);
+        queue.add(start);
+        visited.add(start);
+
+        while (!queue.isEmpty()) {
+            State current = queue.poll();
+
+            if (current.four == 2) {
+                System.out.println("Solution found!");
+                printPath(parent, current);
+                return;
+            }
+
+            List<State> nextMoves = Arrays.asList(
+                new State(4, current.three), // Fill 4L
+                new State(current.four, 3),  // Fill 3L
+                new State(0, current.three), // Empty 4L
+                new State(current.four, 0),  // Empty 3L
+                new State(
+                    Math.max(0, current.four - (3 - current.three)),
+                    Math.min(3, current.three + current.four) // Pour 4L → 3L
+                ),
+                new State(
+                    Math.min(4, current.four + current.three),
+                    Math.max(0, current.three - (4 - current.four)) // Pour 3L → 4L
+                )
+            );
+
+            for (State next : nextMoves) {
+                if (!visited.contains(next)) {
+                    visited.add(next);
+                    parent.put(next, current);
+                    queue.add(next);
+                }
+            }
+        }
+
+        System.out.println("No solution found.");
+    }
+
+    public static void main(String[] args) {
+        bfsWaterJug();
+    }
+}
+
+
+
