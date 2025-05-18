@@ -1,0 +1,241 @@
+Missionaries- DFS
+import java.util.*;
+
+public class MissionariesCannibals {
+
+    static class State {
+        int m, c, boat; // missionaries, cannibals, boat position
+        List<int[]> path;
+
+        public State(int m, int c, int boat, List<int[]> path) {
+            this.m = m;
+            this.c = c;
+            this.boat = boat;
+            this.path = new ArrayList<>(path);
+        }
+
+        public State(int m, int c, int boat) {
+            this(m, c, boat, new ArrayList<>());
+        }
+
+        boolean isValid() {
+            if (m < 0 || c < 0 || m > 3 || c > 3) return false;
+            if (m > 0 && m < c) return false;
+            if ((3 - m) > 0 && (3 - m) < (3 - c)) return false;
+            return true;
+        }
+
+        boolean isGoal() {
+            return m == 0 && c == 0 && boat == 0;
+        }
+
+        List<State> getNextStates() {
+            int[][] moves = {{1,0},{2,0},{0,1},{0,2},{1,1}};
+            List<State> nextStates = new ArrayList<>();
+
+            for (int[] move : moves) {
+                int dm = move[0], dc = move[1];
+                State newState;
+                if (boat == 1) {
+                    newState = new State(m - dm, c - dc, 0, path);
+                } else {
+                    newState = new State(m + dm, c + dc, 1, path);
+                }
+                newState.path.add(new int[]{dm, dc});
+                if (newState.isValid()) {
+                    nextStates.add(newState);
+                }
+            }
+            return nextStates;
+        }
+
+        @Override
+        public int hashCode() {
+            return Objects.hash(m, c, boat);
+        }
+
+        @Override
+        public boolean equals(Object o) {
+            if (!(o instanceof State)) return false;
+            State other = (State) o;
+            return this.m == other.m && this.c == other.c && this.boat == other.boat;
+        }
+    }
+
+    static void printSolution(List<int[]> path) {
+        int lm = 3, lc = 3, rm = 0, rc = 0;
+        String side = "Left";
+
+        System.out.println("Start: Left (3M, 3C) | Right (0M, 0C) | Boat: " + side);
+
+        for (int[] move : path) {
+            int dm = move[0], dc = move[1];
+            if (side.equals("Left")) {
+                lm -= dm; lc -= dc;
+                rm += dm; rc += dc;
+                side = "Right";
+            } else {
+                lm += dm; lc += dc;
+                rm -= dm; rc -= dc;
+                side = "Left";
+            }
+
+            System.out.printf("Move: %dM, %dC | Left (%dM, %dC) | Right (%dM, %dC) | Boat: %s\n",
+                    dm, dc, lm, lc, rm, rc, side);
+        }
+    }
+
+    static void solveDFS() {
+        Deque<State> stack = new ArrayDeque<>();
+        Set<State> visited = new HashSet<>();
+
+        stack.push(new State(3, 3, 1));
+
+        while (!stack.isEmpty()) {
+            State state = stack.pop();
+
+            if (state.isGoal()) {
+                System.out.println("Solution Found!");
+                printSolution(state.path);
+                return;
+            }
+
+            visited.add(state);
+
+            for (State next : state.getNextStates()) {
+                if (!visited.contains(next)) {
+                    stack.push(next);
+                }
+            }
+        }
+
+        System.out.println("No solution found.");
+    }
+
+    public static void main(String[] args) {
+        solveDFS();
+    }
+}
+
+Missionaries BFS
+import java.util.*;
+
+public class Main {
+    static class State {
+        int m, c, boat;
+        List<int[]> path;
+
+        public State(int m, int c, int boat, List<int[]> path) {
+            this.m = m;
+            this.c = c;
+            this.boat = boat;
+            this.path = new ArrayList<>(path);
+        }
+
+        public State(int m, int c, int boat) {
+            this(m, c, boat, new ArrayList<>());
+        }
+
+        public boolean isValid() {
+            if (m < 0 || c < 0 || m > 3 || c > 3) return false;
+            if ((m > 0 && m < c) || ((3 - m) > 0 && (3 - m) < (3 - c))) return false;
+            return true;
+        }
+
+        public boolean isGoal() {
+            return m == 0 && c == 0 && boat == 0;
+        }
+
+        public List<State> getNextStates() {
+            int[][] moves = { {1, 0}, {2, 0}, {0, 1}, {0, 2}, {1, 1} };
+            List<State> nextStates = new ArrayList<>();
+
+            for (int[] move : moves) {
+                int dm = move[0], dc = move[1];
+                State newState;
+
+                if (boat == 1) { // Boat on left
+                    newState = new State(m - dm, c - dc, 0, path);
+                } else { // Boat on right
+                    newState = new State(m + dm, c + dc, 1, path);
+                }
+
+                newState.path.add(new int[]{dm, dc});
+
+                if (newState.isValid()) {
+                    nextStates.add(newState);
+                }
+            }
+
+            return nextStates;
+        }
+
+        @Override
+        public int hashCode() {
+            return Objects.hash(m, c, boat);
+        }
+
+        @Override
+        public boolean equals(Object obj) {
+            if (!(obj instanceof State)) return false;
+            State other = (State) obj;
+            return this.m == other.m && this.c == other.c && this.boat == other.boat;
+        }
+    }
+
+    public static void printSolution(List<int[]> path) {
+        int lm = 3, lc = 3, rm = 0, rc = 0;
+        String side = "Left";
+
+        System.out.println("Start: Left (3M, 3C) | Right (0M, 0C) | Boat: " + side);
+
+        for (int[] move : path) {
+            int dm = move[0], dc = move[1];
+            if (side.equals("Left")) {
+                lm -= dm; lc -= dc;
+                rm += dm; rc += dc;
+                side = "Right";
+            } else {
+                lm += dm; lc += dc;
+                rm -= dm; rc -= dc;
+                side = "Left";
+            }
+
+            System.out.println("Move: " + dm + "M, " + dc + "C | " +
+                    "Left (" + lm + "M, " + lc + "C) | " +
+                    "Right (" + rm + "M, " + rc + "C) | " +
+                    "Boat: " + side);
+        }
+    }
+
+    public static void solveBFS() {
+        Queue<State> queue = new LinkedList<>();
+        Set<State> visited = new HashSet<>();
+
+        queue.add(new State(3, 3, 1));
+
+        while (!queue.isEmpty()) {
+            State state = queue.poll();
+
+            if (state.isGoal()) {
+                System.out.println("Solution Found!");
+                printSolution(state.path);
+                return;
+            }
+
+            visited.add(state);
+
+            for (State next : state.getNextStates()) {
+                if (!visited.contains(next)) {
+                    queue.add(next);
+                }
+            }
+        }
+
+        System.out.println("No solution found.");
+    }
+
+    public static void main(String[] args) {
+        solveBFS();
+    }
+}
