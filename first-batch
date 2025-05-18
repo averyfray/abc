@@ -1,0 +1,1323 @@
+Prolog family tree: 
+
+% Define male and female facts
+male(roshan).
+male(mahendra).
+male(rajesh).
+male(ganesh).
+male(aashish).
+male(akshat).
+male(akash).
+male(saurabh).
+male(sachin).
+male(chirag).
+male(kapil).
+
+female(aastha).
+female(avadhi).
+female(teena).
+female(pushpa).
+female(usha).
+female(mamata).
+female(devi).
+female(madhur).
+female(anshu).
+female(akshara).
+female(avanya).
+
+% Define parent relationships
+parent(roshan, aastha).
+parent(roshan, avadhi).
+parent(teena, aastha).
+parent(teena, avadhi).
+
+parent(mahendra, aashish).
+parent(mahendra, akshat).
+parent(usha, aashish).
+parent(usha, akshat).
+
+parent(rajesh, akash).
+parent(rajesh, akshara).
+parent(mamata, akash).
+parent(mamata, akshara).
+
+parent(pushpa, sachin).
+parent(pushpa, chirag).
+parent(pushpa, kapil).
+parent(ganesh, sachin).
+parent(ganesh, chirag).
+parent(ganesh, kapil).
+
+parent(akshat, avanya).
+parent(anshu, avanya).
+parent(devi, roshan).
+
+parent(devi, mahendra).
+parent(devi, rajesh).
+parent(devi, pushpa).
+
+% Define marriage relationships
+married(roshan, teena).
+married(teena, roshan).
+married(mahendra, usha).
+married(usha, mahendra).
+married(rajesh, mamata).
+married(mamata, rajesh).
+married(pushpa, ganesh).
+married(ganesh, pushpa).
+married(aashish, madhur).
+married(madhur, aashish).
+married(akshat, anshu).
+married(anshu, akshat).
+married(akshara, saurabh).
+married(saurabh, akshara).
+
+
+
+% Define helpful rules
+father(X, Y) :- male(X), parent(X, Y).
+mother(X, Y) :- female(X), parent(X, Y).
+child(X, Y) :- parent(Y, X).
+son(X, Y) :- male(X), child(X, Y).
+daughter(X, Y) :- female(X), child(X, Y).
+
+% Sibling relationships
+sibling(X, Y) :- parent(Z, X), parent(Z, Y), X \= Y.
+brother(X, Y) :- male(X), sibling(X, Y).
+sister(X, Y) :- female(X), sibling(X, Y).
+
+% Aunt/Uncle relationships
+aunt(X, Y) :- female(X), sibling(X, Z), parent(Z, Y).
+uncle(X, Y) :- male(X), sibling(X, Z), parent(Z, Y).
+
+% Cousin relationships
+cousin(X, Y) :- parent(Z, X), parent(W, Y), sibling(Z, W).
+
+% Grandparent relationships
+grandparent(X, Y) :- parent(X, Z), parent(Z, Y).
+grandmother(X, Y) :- female(X), grandparent(X, Y).
+grandfather(X, Y) :- male(X), grandparent(X, Y).
+
+% Niece/nephew relationships
+niece(X, Y) :- female(X), parent(Z, X), sibling(Z, Y).
+nephew(X, Y) :- male(X), parent(Z, X), sibling(Z, Y).
+
+% In-law relationships
+father_in_law(X, Y) :- male(X), parent(X, Z), married(Y, Z).
+mother_in_law(X, Y) :- female(X), parent(X, Z), married(Y, Z).
+brother_in_law(X, Y) :- male(X), sibling(X, Z), married(Y, Z).
+sister_in_law(X, Y) :- female(X), sibling(X, Z), married(Y, Z).
+
+:- initialization(main).
+
+main :-
+    read(Query1),
+    call(Query1),
+    write('Answer 1: '), write(Query1), nl,
+
+    read(Query2),
+    call(Query2),
+    write('Answer 2: '), write(Query2), nl,
+
+    read(Query3),
+    call(Query3),
+    write('Answer 3: '), write(Query3), nl,
+
+    halt.
+
+
+
+Input: 
+mother(X, avadhi).
+cousin(Y, kapil).
+grandparent(Z, akash).
+
+
+Without input: 
+% Define male and female facts
+male(roshan).
+male(mahendra).
+male(rajesh).
+male(ganesh).
+male(aashish).
+male(akshat).
+male(akash).
+male(saurabh).
+male(sachin).
+male(chirag).
+male(kapil).
+
+female(aastha).
+female(avadhi).
+female(teena).
+female(pushpa).
+female(usha).
+female(mamata).
+female(devi).
+female(madhur).
+female(anshu).
+female(akshara).
+female(avanya).
+
+% Define parent relationships
+parent(roshan, aastha).
+parent(roshan, avadhi).
+parent(teena, aastha).
+parent(teena, avadhi).
+
+parent(mahendra, aashish).
+parent(mahendra, akshat).
+parent(usha, aashish).
+parent(usha, akshat).
+
+parent(rajesh, akash).
+parent(rajesh, akshara).
+parent(mamata, akash).
+parent(mamata, akshara).
+
+parent(pushpa, sachin).
+parent(pushpa, chirag).
+parent(pushpa, kapil).
+parent(ganesh, sachin).
+parent(ganesh, chirag).
+parent(ganesh, kapil).
+
+parent(akshat, avanya).
+parent(anshu, avanya).
+parent(devi, roshan).
+
+parent(devi, mahendra).
+parent(devi, rajesh).
+parent(devi, pushpa).
+
+% Define marriage relationships
+married(roshan, teena).
+married(teena, roshan).
+married(mahendra, usha).
+married(usha, mahendra).
+married(rajesh, mamata).
+married(mamata, rajesh).
+married(pushpa, ganesh).
+married(ganesh, pushpa).
+married(aashish, madhur).
+married(madhur, aashish).
+married(akshat, anshu).
+married(anshu, akshat).
+married(akshara, saurabh).
+married(saurabh, akshara).
+
+
+
+% Define helpful rules
+father(X, Y) :- male(X), parent(X, Y).
+mother(X, Y) :- female(X), parent(X, Y).
+child(X, Y) :- parent(Y, X).
+son(X, Y) :- male(X), child(X, Y).
+daughter(X, Y) :- female(X), child(X, Y).
+
+% Sibling relationships
+sibling(X, Y) :- parent(Z, X), parent(Z, Y), X \= Y.
+brother(X, Y) :- male(X), sibling(X, Y).
+sister(X, Y) :- female(X), sibling(X, Y).
+
+% Aunt/Uncle relationships
+aunt(X, Y) :- female(X), sibling(X, Z), parent(Z, Y).
+uncle(X, Y) :- male(X), sibling(X, Z), parent(Z, Y).
+
+% Cousin relationships
+cousin(X, Y) :- parent(Z, X), parent(W, Y), sibling(Z, W).
+
+% Grandparent relationships
+grandparent(X, Y) :- parent(X, Z), parent(Z, Y).
+grandmother(X, Y) :- female(X), grandparent(X, Y).
+grandfather(X, Y) :- male(X), grandparent(X, Y).
+
+% Niece/nephew relationships
+niece(X, Y) :- female(X), parent(Z, X), sibling(Z, Y).
+nephew(X, Y) :- male(X), parent(Z, X), sibling(Z, Y).
+
+% In-law relationships
+father_in_law(X, Y) :- male(X), parent(X, Z), married(Y, Z).
+mother_in_law(X, Y) :- female(X), parent(X, Z), married(Y, Z).
+brother_in_law(X, Y) :- male(X), sibling(X, Z), married(Y, Z).
+sister_in_law(X, Y) :- female(X), sibling(X, Z), married(Y, Z).
+
+:- initialization(main).
+
+main :-
+    mother(X, avadhi),
+    write('Mother of Avadhi: '), write(X), nl,
+
+    cousin(Y, kapil),
+    write('Cousin of Kapil: '), write(Y), nl,
+
+    grandparent(Z, akash),
+    write('Grandparent of Akash: '), write(Z), nl,
+
+    halt.
+
+
+Find all relations:
+ main :-
+    % Get all cousins of Kapil
+    findall(X, cousin(X, kapil), Cousins),
+    write('Cousins of Kapil: '), write(Cousins), nl,
+
+    % Get all aunts of Akash
+    findall(X, aunt(X, akash), Aunts),
+    write('Aunts of Akash: '), write(Aunts), nl,
+
+    % Get all grandparents of Akash
+    findall(X, grandparent(X, akash), Grandparents),
+    write('Grandparents of Akash: '), write(Grandparents), nl,
+
+    halt.
+
+
+
+Expert system: 
+
+% Knowledge base: book(Title, Genre, Length, Author)
+
+book('Dune', sci_fi, long, 'Frank Herbert').
+book('Neuromancer', sci_fi, short, 'William Gibson').
+book('Foundation', sci_fi, long, 'Isaac Asimov').
+book('Hyperion', sci_fi, long, 'Dan Simmons').
+book('Snow Crash', sci_fi, short, 'Neal Stephenson').
+
+book('Pride and Prejudice', romance, long, 'Jane Austen').
+book('Me Before You', romance, long, 'Jojo Moyes').
+book('The Notebook', romance, short, 'Nicholas Sparks').
+book('Twilight', romance, long, 'Stephenie Meyer').
+book('Outlander', romance, long, 'Diana Gabaldon').
+
+book('The Hobbit', fantasy, short, 'J.R.R. Tolkien').
+book('Harry Potter and the Sorcerer\'s Stone', fantasy, long, 'J.K. Rowling').
+book('The Name of the Wind', fantasy, long, 'Patrick Rothfuss').
+book('Mistborn', fantasy, long, 'Brandon Sanderson').
+book('Eragon', fantasy, long, 'Christopher Paolini').
+
+book('The Da Vinci Code', mystery, long, 'Dan Brown').
+book('Gone Girl', mystery, long, 'Gillian Flynn').
+book('The Girl with the Dragon Tattoo', mystery, long, 'Stieg Larsson').
+book('Sherlock Holmes: A Study in Scarlet', mystery, short, 'Arthur Conan Doyle').
+book('Big Little Lies', mystery, long, 'Liane Moriarty').
+
+book('1984', drama, short, 'George Orwell').
+book('To Kill a Mockingbird', drama, long, 'Harper Lee').
+book('The Great Gatsby', drama, short, 'F. Scott Fitzgerald').
+book('The Catcher in the Rye', drama, short, 'J.D. Salinger').
+book('The Road', drama, short, 'Cormac McCarthy').
+
+book('Charlotte\'s Web', children, short, 'E.B. White').
+book('Matilda', children, short, 'Roald Dahl').
+book('Harry Potter and the Chamber of Secrets', children, long, 'J.K. Rowling').
+book('The Lion, the Witch and the Wardrobe', children, short, 'C.S. Lewis').
+book('Percy Jackson: The Lightning Thief', children, long, 'Rick Riordan').
+
+book('Educated', biography, long, 'Tara Westover').
+book('Steve Jobs', biography, long, 'Walter Isaacson').
+book('Becoming', biography, long, 'Michelle Obama').
+book('The Diary of a Young Girl', biography, short, 'Anne Frank').
+book('Long Walk to Freedom', biography, long, 'Nelson Mandela').
+
+book('The Lean Startup', business, short, 'Eric Ries').
+book('Rich Dad Poor Dad', business, short, 'Robert Kiyosaki').
+book('The 7 Habits of Highly Effective People', business, long, 'Stephen R. Covey').
+book('Thinking, Fast and Slow', business, long, 'Daniel Kahneman').
+book('Zero to One', business, short, 'Peter Thiel').
+
+book('Sapiens', history, long, 'Yuval Noah Harari').
+book('Guns, Germs, and Steel', history, long, 'Jared Diamond').
+book('A People’s History of the United States', history, long, 'Howard Zinn').
+book('The Silk Roads', history, long, 'Peter Frankopan').
+book('1776', history, short, 'David McCullough').
+
+book('Cosmos', science, long, 'Carl Sagan').
+book('A Brief History of Time', science, short, 'Stephen Hawking').
+book('The Selfish Gene', science, long, 'Richard Dawkins').
+book('The Gene: An Intimate History', science, long, 'Siddhartha Mukherjee').
+book('Astrophysics for People in a Hurry', science, short, 'Neil deGrasse Tyson').
+
+% Start interaction
+:- initialization(main).
+
+main :-
+    write('Welcome to the Book Recommendation Expert System!'), nl,
+
+    write('Enter preferred genre (e.g., fantasy, sci_fi, romance, mystery, drama, children): '),
+    read(Genre),
+
+    write('Do you want a short or long book? (short/long): '),
+    read(Length),
+
+    write('Do you have a favorite author? Type the name in single quotes or type no: '),
+    read(FavAuthor),
+
+    find_books(Genre, Length, FavAuthor, Recommendations),
+    nl, write('Here are some books we recommend:'), nl,
+    display_recommendations(Recommendations),
+    halt.
+
+% Find books based on genre, length, and optional author
+find_books(Genre, Length, no, Recommendations) :-
+    findall(Title, book(Title, Genre, Length, _), Recommendations).
+find_books(Genre, Length, FavAuthor, Recommendations) :-
+    findall(Title, book(Title, Genre, Length, FavAuthor), Recommendations).
+
+display_recommendations(Recommendations) :-
+    (   Recommendations == []
+    ->  write('Sorry, no matching books found.'), nl
+    ;   print_recommendations(Recommendations)
+    ).
+
+print_recommendations([]).
+print_recommendations([H|T]) :-
+    write('- '), write(H), nl,
+    print_recommendations(T).
+
+
+
+% Book facts: book(Title, Author, Genre, Length, Audience)
+
+book('Harry Potter and the Sorcerer''s Stone', 'J.K. Rowling', fantasy, medium, young_adult).
+book('Harry Potter and the Chamber of Secrets', 'J.K. Rowling', fantasy, medium, young_adult).
+book('Harry Potter and the Prisoner of Azkaban', 'J.K. Rowling', fantasy, medium, young_adult).
+book('The Hobbit', 'J.R.R. Tolkien', fantasy, medium, children).
+book('The Fellowship of the Ring', 'J.R.R. Tolkien', fantasy, long, adult).
+book('The Two Towers', 'J.R.R. Tolkien', fantasy, long, adult).
+book('The Return of the King', 'J.R.R. Tolkien', fantasy, long, adult).
+book('A Game of Thrones', 'George R.R. Martin', fantasy, long, adult).
+book('A Clash of Kings', 'George R.R. Martin', fantasy, long, adult).
+book('A Storm of Swords', 'George R.R. Martin', fantasy, long, adult).
+book('1984', 'George Orwell', sci_fi, medium, adult).
+book('Brave New World', 'Aldous Huxley', sci_fi, medium, adult).
+book('Fahrenheit 451', 'Ray Bradbury', sci_fi, short, adult).
+book('Ender''s Game', 'Orson Scott Card', sci_fi, medium, young_adult).
+book('Dune', 'Frank Herbert', sci_fi, long, adult).
+book('Neuromancer', 'William Gibson', sci_fi, medium, adult).
+book('The Martian', 'Andy Weir', sci_fi, medium, adult).
+book('Pride and Prejudice', 'Jane Austen', romance, medium, adult).
+book('Sense and Sensibility', 'Jane Austen', romance, medium, adult).
+book('Emma', 'Jane Austen', romance, long, adult).
+book('Me Before You', 'Jojo Moyes', romance, medium, adult).
+book('The Fault in Our Stars', 'John Green', romance, medium, young_adult).
+book('Paper Towns', 'John Green', romance, medium, young_adult).
+book('Looking for Alaska', 'John Green', romance, medium, young_adult).
+book('To Kill a Mockingbird', 'Harper Lee', drama, medium, young_adult).
+book('The Great Gatsby', 'F. Scott Fitzgerald', drama, short, adult).
+book('Of Mice and Men', 'John Steinbeck', drama, short, adult).
+book('The Catcher in the Rye', 'J.D. Salinger', drama, medium, young_adult).
+book('Gone Girl', 'Gillian Flynn', mystery, medium, adult).
+book('The Girl on the Train', 'Paula Hawkins', mystery, medium, adult).
+book('Sherlock Holmes: A Study in Scarlet', 'Arthur Conan Doyle', mystery, short, adult).
+book('The Da Vinci Code', 'Dan Brown', mystery, long, adult).
+book('Angels & Demons', 'Dan Brown', mystery, long, adult).
+book('Inferno', 'Dan Brown', mystery, long, adult).
+book('Twilight', 'Stephenie Meyer', fantasy, medium, young_adult).
+book('New Moon', 'Stephenie Meyer', fantasy, medium, young_adult).
+book('Eclipse', 'Stephenie Meyer', fantasy, medium, young_adult).
+book('Breaking Dawn', 'Stephenie Meyer', fantasy, long, young_adult).
+book('The Lightning Thief', 'Rick Riordan', fantasy, medium, young_adult).
+book('The Sea of Monsters', 'Rick Riordan', fantasy, medium, young_adult).
+book('The Titan''s Curse', 'Rick Riordan', fantasy, medium, young_adult).
+book('The Maze Runner', 'James Dashner', sci_fi, medium, young_adult).
+book('The Scorch Trials', 'James Dashner', sci_fi, medium, young_adult).
+book('The Death Cure', 'James Dashner', sci_fi, medium, young_adult).
+book('Divergent', 'Veronica Roth', sci_fi, medium, young_adult).
+book('Insurgent', 'Veronica Roth', sci_fi, medium, young_adult).
+book('Allegiant', 'Veronica Roth', sci_fi, medium, young_adult).
+book('Matilda', 'Roald Dahl', children, short, children).
+book('Charlie and the Chocolate Factory', 'Roald Dahl', children, short, children).
+book('The BFG', 'Roald Dahl', children, short, children).
+book('Coraline', 'Neil Gaiman', fantasy, short, children).
+book('The Graveyard Book', 'Neil Gaiman', fantasy, medium, children).
+
+% =========================
+% Expert System Rules
+% =========================
+
+% Recommend books by genre
+recommend_by_genre(Genre, Book) :-
+    book(Book, _, Genre, _, _).
+
+% Recommend books by author
+recommend_by_author(Author, Book) :-
+    book(Book, Author, _, _, _).
+
+% Recommend books by target audience
+recommend_by_audience(Audience, Book) :-
+    book(Book, _, _, _, Audience).
+
+% Recommend short books for busy people
+recommend_short_books(Book) :-
+    book(Book, _, _, short, _).
+
+% Recommend long books for avid readers
+recommend_long_books(Book) :-
+    book(Book, _, _, long, _).
+
+% Recommend books by multiple filters
+recommend(Book, Genre, Length, Audience) :-
+    book(Book, _, Genre, Length, Audience).
+
+
+:- initialization(main).
+
+main :-
+    write('Fantasy books:'), nl,
+    forall(recommend_by_genre(fantasy, B), (write('- '), write(B), nl)),
+
+    nl, write('Books by J.K. Rowling:'), nl,
+    forall(recommend_by_author('J.K. Rowling', B), (write('- '), write(B), nl)),
+
+    nl, write('Books for young adults:'), nl,
+    forall(recommend_by_audience(young_adult, B), (write('- '), write(B), nl)),
+
+    nl, write('Short books recommended:'), nl,
+    forall(recommend_short_books(B), (write('- '), write(B), nl)),
+
+    nl, write('Long books for avid readers:'), nl,
+    forall(recommend_long_books(B), (write('- '), write(B), nl)),
+
+    nl, halt.
+
+
+
+
+Animal recognition system: 
+% Facts about animals (for reference, not used directly here)
+has_wings(bird).
+has_wings(bat).
+
+has_legs(bird, 2).
+has_legs(dog, 4).
+has_legs(cat, 4).
+has_legs(spider, 8).
+has_legs(human, 2).
+has_legs(deer, 4).
+has_legs(cow, 4).
+has_legs(elephant, 4).
+has_legs(zebra, 4).
+has_legs(monkey, 2).
+has_legs(kangaroo, 2).
+
+has_antlers(deer).
+has_horns(cow).
+has_trunk(elephant).
+has_stripes(zebra).
+has_fur(dog).
+has_fur(cat).
+has_feathers(bird).
+has_tail(monkey).
+has_pouch(kangaroo).
+can_fly(bird).
+can_fly(bat).
+
+% ask/2 - Ask a yes/no question and bind Answer to true/false
+ask(Question, Answer) :-
+    write(Question), write(' (yes/no): '), nl,
+    read(Response),
+    (Response == yes ; Response == y -> Answer = true ; Answer = false).
+
+% identify/14 - identify animal from answers
+identify(true, true, true, _, _, _, _, _, _, _, _, _, _, bird) :- !.
+identify(true, true, false, _, _, _, _, _, _, _, _, _, _, bat) :- !.
+identify(_, _, _, true, true, _, _, _, _, _, _, _, _, deer) :- !.
+identify(_, _, _, true, false, true, _, _, _, _, _, _, _, cow) :- !.
+identify(_, _, _, true, false, false, true, _, _, _, _, _, _, dog_or_cat) :- !.
+identify(_, _, _, true, false, false, false, true, _, _, _, _, _, zebra) :- !.
+identify(_, _, _, true, false, false, false, false, true, _, _, _, _, elephant) :- !.
+identify(_, _, _, _, false, false, false, false, false, true, true, _, _, monkey) :- !.
+identify(_, _, _, _, false, false, false, false, false, true, false, true, _, kangaroo) :- !.
+identify(_, _, _, false, false, false, false, false, false, false, false, false, true, spider) :- !.
+identify(_, _, _, _, _, _, _, _, _, _, _, _, _, unknown).
+:- initialization(main).
+
+% main predicate to start the program
+main :-
+    write('Welcome to the Animal Expert System!'), nl,
+    ask('Does the animal have wings?', Wings), 
+    ask('Can the animal fly?', CanFly), 
+    ask('Does the animal have feathers?', Feathers),
+    ask('Does the animal have 4 legs?', FourLegs),
+    ask('Does the animal have antlers?', Antlers), 
+    ask('Does the animal have horns?', Horns), 
+    ask('Does the animal have fur?', Fur), 
+    ask('Does the animal have stripes?', Stripes),
+    ask('Does the animal have a trunk?', Trunk), 
+    ask('Does the animal have 2 legs?', TwoLegs), 
+    ask('Does the animal have a tail?', Tail), 
+    ask('Does the animal have a pouch?', Pouch), 
+    ask('Does the animal have 8 legs?', EightLegs), 
+
+    identify(Wings, CanFly, Feathers, FourLegs, Antlers, Horns, Fur, Stripes, Trunk, TwoLegs, Tail, Pouch, EightLegs, Animal),
+
+    write('Based on your answers, the animal is likely: '), write(Animal), nl.
+
+
+
+Tic Tac toe - AI method 
+import java.util.*;
+
+public class TicTacToeAI {
+    static String[][] board = {
+        {"", "", ""},
+        {"", "", ""},
+        {"", "", ""}
+    };
+    
+    static String ai = "X";
+    static String player = "O";
+
+    static int[] bestMove() {
+        int bestScore = Integer.MIN_VALUE;
+        int[] move = {-1, -1};
+
+        for (int i = 0; i < 3; i++) {
+            for (int j = 0; j < 3; j++) {
+                if (board[i][j].equals("")) {
+                    board[i][j] = ai;
+                    int score = minimax(board, 0, false);
+                    board[i][j] = "";
+
+                    if (score > bestScore) {
+                        bestScore = score;
+                        move[0] = i;
+                        move[1] = j;
+                    }
+                }
+            }
+        }
+
+        return move;
+    }
+
+    static int minimax(String[][] board, int depth, boolean isMaximizing) {
+        String result = checkWinner();
+        if (result != null) {
+            return score(result);
+        }
+
+        if (isMaximizing) {
+            int bestScore = Integer.MIN_VALUE;
+            for (int i = 0; i < 3; i++) {
+                for (int j = 0; j < 3; j++) {
+                    if (board[i][j].equals("")) {
+                        board[i][j] = ai;
+                        int score = minimax(board, depth + 1, false);
+                        board[i][j] = "";
+                        bestScore = Math.max(score, bestScore);
+                    }
+                }
+            }
+            return bestScore;
+        } else {
+            int worstScore = Integer.MAX_VALUE;
+            for (int i = 0; i < 3; i++) {
+                for (int j = 0; j < 3; j++) {
+                    if (board[i][j].equals("")) {
+                        board[i][j] = player;
+                        int score = minimax(board, depth + 1, true);
+                        board[i][j] = "";
+                        worstScore = Math.min(score, worstScore);
+                    }
+                }
+            }
+            return worstScore;
+        }
+    }
+
+    static int score(String winner) {
+        if (winner.equals(ai)) return 10;
+        if (winner.equals(player)) return -10;
+        return 0;
+    }
+
+    static String checkWinner() {
+        // Rows & Columns
+        for (int i = 0; i < 3; i++) {
+            if (!board[i][0].equals("") &&
+                board[i][0].equals(board[i][1]) &&
+                board[i][1].equals(board[i][2]))
+                return board[i][0];
+
+            if (!board[0][i].equals("") &&
+                board[0][i].equals(board[1][i]) &&
+                board[1][i].equals(board[2][i]))
+                return board[0][i];
+        }
+
+        // Diagonals
+        if (!board[0][0].equals("") &&
+            board[0][0].equals(board[1][1]) &&
+            board[1][1].equals(board[2][2]))
+            return board[0][0];
+
+        if (!board[2][0].equals("") &&
+            board[2][0].equals(board[1][1]) &&
+            board[1][1].equals(board[0][2]))
+            return board[2][0];
+
+        // Tie
+        boolean openSpot = false;
+        for (String[] row : board)
+            for (String cell : row)
+                if (cell.equals("")) openSpot = true;
+
+        return openSpot ? null : "tie";
+    }
+
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+
+        while (checkWinner() == null) {
+            // Display board
+            for (String[] row : board) {
+                System.out.println(Arrays.toString(row));
+            }
+
+            // Player turn
+            System.out.println("Enter your move (row and col): ");
+            int r = sc.nextInt();
+            int c = sc.nextInt();
+            if (board[r][c].equals("")) {
+                board[r][c] = player;
+            }
+
+            // AI turn
+            if (checkWinner() == null) {
+                int[] move = bestMove();
+                board[move[0]][move[1]] = ai;
+            }
+        }
+
+        System.out.println("Game Over: " + checkWinner());
+    }
+}
+
+Tic-tac-toe - NON -AI 
+
+import java.util.*;
+
+public class TicTacToe {
+    static int brk = 0;
+    static char[] row1 = {'_', '_', '_'};
+    static char[] row2 = {'_', '_', '_'};
+    static char[] row3 = {'_', '_', '_'};
+
+    static boolean tryWin(char[] chars) {
+        if (chars[0] == 'X' && chars[1] == 'X' && chars[2] == 'X') {
+            System.out.println("You win!");
+            brk = 1;
+            return true;
+        }
+        if (chars[0] == 'O' && chars[1] == 'O' && chars[2] == 'O') {
+            System.out.println("Computer wins!");
+            brk = 1;
+            return true;
+        }
+
+        // Winning move for computer
+        if (chars[0] == 'O' && chars[1] == 'O' && chars[2] == '_') {
+            chars[2] = 'O';
+            System.out.println("Computer wins!");
+            brk = 1;
+            return true;
+        }
+        if (chars[0] == 'O' && chars[1] == '_' && chars[2] == 'O') {
+            chars[1] = 'O';
+            System.out.println("Computer wins!");
+            brk = 1;
+            return true;
+        }
+        if (chars[0] == '_' && chars[1] == 'O' && chars[2] == 'O') {
+            chars[0] = 'O';
+            System.out.println("Computer wins!");
+            brk = 1;
+            return true;
+        }
+
+        // Blocking move
+        if (chars[0] == 'X' && chars[1] == 'X' && chars[2] == '_') {
+            chars[2] = 'O';
+            return true;
+        }
+        if (chars[0] == 'X' && chars[1] == '_' && chars[2] == 'X') {
+            chars[1] = 'O';
+            return true;
+        }
+        if (chars[0] == '_' && chars[1] == 'X' && chars[2] == 'X') {
+            chars[0] = 'O';
+            return true;
+        }
+
+        return false;
+    }
+
+    static void analyse() {
+    boolean win;
+
+    // Rows
+    if (tryRow(row1) == 1) return;
+    if (tryRow(row2) == 1) return;
+    if (tryRow(row3) == 1) return;
+
+    // Columns
+    char[] col1 = {row1[0], row2[0], row3[0]};
+    win = tryWin(col1);
+    if (win) {
+        row1[0] = col1[0];
+        row2[0] = col1[1];
+        row3[0] = col1[2];
+        return;
+    }
+
+    char[] col2 = {row1[1], row2[1], row3[1]};
+    win = tryWin(col2);
+    if (win) {
+        row1[1] = col2[0];
+        row2[1] = col2[1];
+        row3[1] = col2[2];
+        return;
+    }
+
+    char[] col3 = {row1[2], row2[2], row3[2]};
+    win = tryWin(col3);
+    if (win) {
+        row1[2] = col3[0];
+        row2[2] = col3[1];
+        row3[2] = col3[2];
+        return;
+    }
+
+    // Diagonals
+    char[] diag1 = {row1[0], row2[1], row3[2]};
+    win = tryWin(diag1);
+    if (win) {
+        row1[0] = diag1[0];
+        row2[1] = diag1[1];
+        row3[2] = diag1[2];
+        return;
+    }
+
+    char[] diag2 = {row1[2], row2[1], row3[0]};
+    win = tryWin(diag2);
+    if (win) {
+        row1[2] = diag2[0];
+        row2[1] = diag2[1];
+        row3[0] = diag2[2];
+        return;
+    }
+
+    // Default best move
+    if (row2[1] == '_') row2[1] = 'O';
+    else if (row1[0] == '_') row1[0] = 'O';
+    else if (row1[2] == '_') row1[2] = 'O';
+    else if (row3[2] == '_') row3[2] = 'O';
+    else if (row3[0] == '_') row3[0] = 'O';
+    else if (row3[1] == '_') row3[1] = 'O';
+    else if (row1[1] == '_') row1[1] = 'O';
+    else if (row2[0] == '_') row2[0] = 'O';
+    else if (row2[2] == '_') row2[2] = 'O';
+}
+
+
+    static int tryRow(char[] row) {
+        char[] temp = row.clone();
+        boolean win = tryWin(temp);
+        if (win) {
+            System.arraycopy(temp, 0, row, 0, 3);
+            return 1;
+        }
+        return 0;
+    }
+
+    static void display() {
+        for (char c : row1) System.out.print(c + " ");
+        System.out.println();
+        for (char c : row2) System.out.print(c + " ");
+        System.out.println();
+        for (char c : row3) System.out.print(c + " ");
+        System.out.println();
+    }
+
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        int moveCount = 0;
+
+        System.out.println("Play your move by entering numbers between 1 to 9");
+        System.out.println("1 -> top left corner and 9 -> bottom right corner");
+        System.out.println("1 2 3\n4 5 6\n7 8 9");
+
+        System.out.print("Do you want to play first [y/n]? ");
+        char playFirst = sc.next().charAt(0);
+
+        if (playFirst == 'n') {
+            System.out.println("Computer's move ....");
+            analyse();
+            display();
+            moveCount++;
+        }
+
+        while (moveCount < 9) {
+            System.out.println("Play move ...");
+            int move = sc.nextInt();
+
+            if (move <= 3) row1[move - 1] = 'X';
+            else if (move <= 6) row2[move - 4] = 'X';
+            else row3[move - 7] = 'X';
+
+            moveCount++;
+            if (brk == 1 || moveCount == 9) break;
+
+            display();
+
+            System.out.println("Computer's move ....");
+            analyse();
+            display();
+            moveCount++;
+            if (brk == 1) break;
+        }
+
+        if (brk == 0) System.out.println("Game Over. It's a draw!");
+    }
+}
+
+
+
+Missionaries- DFS
+import java.util.*;
+
+public class MissionariesCannibals {
+
+    static class State {
+        int m, c, boat; // missionaries, cannibals, boat position
+        List<int[]> path;
+
+        public State(int m, int c, int boat, List<int[]> path) {
+            this.m = m;
+            this.c = c;
+            this.boat = boat;
+            this.path = new ArrayList<>(path);
+        }
+
+        public State(int m, int c, int boat) {
+            this(m, c, boat, new ArrayList<>());
+        }
+
+        boolean isValid() {
+            if (m < 0 || c < 0 || m > 3 || c > 3) return false;
+            if (m > 0 && m < c) return false;
+            if ((3 - m) > 0 && (3 - m) < (3 - c)) return false;
+            return true;
+        }
+
+        boolean isGoal() {
+            return m == 0 && c == 0 && boat == 0;
+        }
+
+        List<State> getNextStates() {
+            int[][] moves = {{1,0},{2,0},{0,1},{0,2},{1,1}};
+            List<State> nextStates = new ArrayList<>();
+
+            for (int[] move : moves) {
+                int dm = move[0], dc = move[1];
+                State newState;
+                if (boat == 1) {
+                    newState = new State(m - dm, c - dc, 0, path);
+                } else {
+                    newState = new State(m + dm, c + dc, 1, path);
+                }
+                newState.path.add(new int[]{dm, dc});
+                if (newState.isValid()) {
+                    nextStates.add(newState);
+                }
+            }
+            return nextStates;
+        }
+
+        @Override
+        public int hashCode() {
+            return Objects.hash(m, c, boat);
+        }
+
+        @Override
+        public boolean equals(Object o) {
+            if (!(o instanceof State)) return false;
+            State other = (State) o;
+            return this.m == other.m && this.c == other.c && this.boat == other.boat;
+        }
+    }
+
+    static void printSolution(List<int[]> path) {
+        int lm = 3, lc = 3, rm = 0, rc = 0;
+        String side = "Left";
+
+        System.out.println("Start: Left (3M, 3C) | Right (0M, 0C) | Boat: " + side);
+
+        for (int[] move : path) {
+            int dm = move[0], dc = move[1];
+            if (side.equals("Left")) {
+                lm -= dm; lc -= dc;
+                rm += dm; rc += dc;
+                side = "Right";
+            } else {
+                lm += dm; lc += dc;
+                rm -= dm; rc -= dc;
+                side = "Left";
+            }
+
+            System.out.printf("Move: %dM, %dC | Left (%dM, %dC) | Right (%dM, %dC) | Boat: %s\n",
+                    dm, dc, lm, lc, rm, rc, side);
+        }
+    }
+
+    static void solveDFS() {
+        Deque<State> stack = new ArrayDeque<>();
+        Set<State> visited = new HashSet<>();
+
+        stack.push(new State(3, 3, 1));
+
+        while (!stack.isEmpty()) {
+            State state = stack.pop();
+
+            if (state.isGoal()) {
+                System.out.println("Solution Found!");
+                printSolution(state.path);
+                return;
+            }
+
+            visited.add(state);
+
+            for (State next : state.getNextStates()) {
+                if (!visited.contains(next)) {
+                    stack.push(next);
+                }
+            }
+        }
+
+        System.out.println("No solution found.");
+    }
+
+    public static void main(String[] args) {
+        solveDFS();
+    }
+}
+
+Missionaries BFS
+import java.util.*;
+
+public class Main {
+    static class State {
+        int m, c, boat;
+        List<int[]> path;
+
+        public State(int m, int c, int boat, List<int[]> path) {
+            this.m = m;
+            this.c = c;
+            this.boat = boat;
+            this.path = new ArrayList<>(path);
+        }
+
+        public State(int m, int c, int boat) {
+            this(m, c, boat, new ArrayList<>());
+        }
+
+        public boolean isValid() {
+            if (m < 0 || c < 0 || m > 3 || c > 3) return false;
+            if ((m > 0 && m < c) || ((3 - m) > 0 && (3 - m) < (3 - c))) return false;
+            return true;
+        }
+
+        public boolean isGoal() {
+            return m == 0 && c == 0 && boat == 0;
+        }
+
+        public List<State> getNextStates() {
+            int[][] moves = { {1, 0}, {2, 0}, {0, 1}, {0, 2}, {1, 1} };
+            List<State> nextStates = new ArrayList<>();
+
+            for (int[] move : moves) {
+                int dm = move[0], dc = move[1];
+                State newState;
+
+                if (boat == 1) { // Boat on left
+                    newState = new State(m - dm, c - dc, 0, path);
+                } else { // Boat on right
+                    newState = new State(m + dm, c + dc, 1, path);
+                }
+
+                newState.path.add(new int[]{dm, dc});
+
+                if (newState.isValid()) {
+                    nextStates.add(newState);
+                }
+            }
+
+            return nextStates;
+        }
+
+        @Override
+        public int hashCode() {
+            return Objects.hash(m, c, boat);
+        }
+
+        @Override
+        public boolean equals(Object obj) {
+            if (!(obj instanceof State)) return false;
+            State other = (State) obj;
+            return this.m == other.m && this.c == other.c && this.boat == other.boat;
+        }
+    }
+
+    public static void printSolution(List<int[]> path) {
+        int lm = 3, lc = 3, rm = 0, rc = 0;
+        String side = "Left";
+
+        System.out.println("Start: Left (3M, 3C) | Right (0M, 0C) | Boat: " + side);
+
+        for (int[] move : path) {
+            int dm = move[0], dc = move[1];
+            if (side.equals("Left")) {
+                lm -= dm; lc -= dc;
+                rm += dm; rc += dc;
+                side = "Right";
+            } else {
+                lm += dm; lc += dc;
+                rm -= dm; rc -= dc;
+                side = "Left";
+            }
+
+            System.out.println("Move: " + dm + "M, " + dc + "C | " +
+                    "Left (" + lm + "M, " + lc + "C) | " +
+                    "Right (" + rm + "M, " + rc + "C) | " +
+                    "Boat: " + side);
+        }
+    }
+
+    public static void solveBFS() {
+        Queue<State> queue = new LinkedList<>();
+        Set<State> visited = new HashSet<>();
+
+        queue.add(new State(3, 3, 1));
+
+        while (!queue.isEmpty()) {
+            State state = queue.poll();
+
+            if (state.isGoal()) {
+                System.out.println("Solution Found!");
+                printSolution(state.path);
+                return;
+            }
+
+            visited.add(state);
+
+            for (State next : state.getNextStates()) {
+                if (!visited.contains(next)) {
+                    queue.add(next);
+                }
+            }
+        }
+
+        System.out.println("No solution found.");
+    }
+
+    public static void main(String[] args) {
+        solveBFS();
+    }
+}
+
+
+
+
+
+Waterjar DFS
+import java.util.*;
+
+public class WaterJugDFS {
+    
+    static class State {
+        int four, three;
+
+        State(int four, int three) {
+            this.four = four;
+            this.three = three;
+        }
+
+        @Override
+        public boolean equals(Object obj) {
+            if (this == obj) return true;
+            if (obj == null || getClass() != obj.getClass()) return false;
+            State state = (State) obj;
+            return four == state.four && three == state.three;
+        }
+
+        @Override
+        public int hashCode() {
+            return Objects.hash(four, three);
+        }
+
+        @Override
+        public String toString() {
+            return "(" + four + ", " + three + ")";
+        }
+    }
+
+    static Set<State> visited = new HashSet<>();
+    static List<State> solutionPath = new ArrayList<>();
+    static Random rand = new Random();
+
+    public static boolean dfsWaterJug(State current) {
+        if (visited.contains(current)) return false;
+        visited.add(current);
+        solutionPath.add(current);
+
+        if (current.four == 2) return true;
+
+        List<State> nextMoves = Arrays.asList(
+            new State(4, current.three), // Fill 4L
+            new State(current.four, 3),  // Fill 3L
+            new State(0, current.three), // Empty 4L
+            new State(current.four, 0),  // Empty 3L
+            new State(
+                Math.max(0, current.four - (3 - current.three)),
+                Math.min(3, current.three + current.four)
+            ), // Pour 4L -> 3L
+            new State(
+                Math.min(4, current.four + current.three),
+                Math.max(0, current.three - (4 - current.four))
+            ) // Pour 3L -> 4L
+        );
+
+        Collections.shuffle(nextMoves, rand); // Random order
+
+        for (State next : nextMoves) {
+            if (dfsWaterJug(next)) return true;
+        }
+
+        solutionPath.remove(solutionPath.size() - 1); // Backtrack
+        return false;
+    }
+
+    public static void main(String[] args) {
+        State initial = new State(0, 0);
+
+        if (dfsWaterJug(initial)) {
+            System.out.println("Solution found! Path:");
+            for (State state : solutionPath) {
+                System.out.println(state);
+            }
+        } else {
+            System.out.println("No solution found.");
+        }
+    }
+}
+
+
+
+Waterjar BFS
+import java.util.*;
+
+public class WaterJugBFS {
+
+    static class State {
+        int four, three;
+
+        State(int four, int three) {
+            this.four = four;
+            this.three = three;
+        }
+
+        // Needed for using State in HashSet and HashMap
+        @Override
+        public boolean equals(Object obj) {
+            if (this == obj) return true;
+            if (obj == null || getClass() != obj.getClass()) return false;
+            State other = (State) obj;
+            return four == other.four && three == other.three;
+        }
+
+        @Override
+        public int hashCode() {
+            return Objects.hash(four, three);
+        }
+    }
+
+    // To print the path from initial state to the goal
+    static void printPath(Map<State, State> parent, State goal) {
+        List<State> path = new ArrayList<>();
+        while (parent.containsKey(goal)) {
+            path.add(goal);
+            goal = parent.get(goal);
+        }
+        path.add(new State(0, 0)); // Start state
+
+        Collections.reverse(path);
+
+        for (State s : path) {
+            System.out.println("(" + s.four + ", " + s.three + ")");
+        }
+    }
+
+    static void bfsWaterJug() {
+        Queue<State> queue = new LinkedList<>();
+        Set<State> visited = new HashSet<>();
+        Map<State, State> parent = new HashMap<>();
+
+        State start = new State(0, 0);
+        queue.add(start);
+        visited.add(start);
+
+        while (!queue.isEmpty()) {
+            State current = queue.poll();
+
+            if (current.four == 2) {
+                System.out.println("Solution found!");
+                printPath(parent, current);
+                return;
+            }
+
+            List<State> nextMoves = Arrays.asList(
+                new State(4, current.three), // Fill 4L
+                new State(current.four, 3),  // Fill 3L
+                new State(0, current.three), // Empty 4L
+                new State(current.four, 0),  // Empty 3L
+                new State(
+                    Math.max(0, current.four - (3 - current.three)),
+                    Math.min(3, current.three + current.four) // Pour 4L → 3L
+                ),
+                new State(
+                    Math.min(4, current.four + current.three),
+                    Math.max(0, current.three - (4 - current.four)) // Pour 3L → 4L
+                )
+            );
+
+            for (State next : nextMoves) {
+                if (!visited.contains(next)) {
+                    visited.add(next);
+                    parent.put(next, current);
+                    queue.add(next);
+                }
+            }
+        }
+
+        System.out.println("No solution found.");
+    }
+
+    public static void main(String[] args) {
+        bfsWaterJug();
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+
