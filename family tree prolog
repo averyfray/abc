@@ -1,0 +1,275 @@
+
+Prolog family tree: 
+
+% Define male and female facts
+male(roshan).
+male(mahendra).
+male(rajesh).
+male(ganesh).
+male(aashish).
+male(akshat).
+male(akash).
+male(saurabh).
+male(sachin).
+male(chirag).
+male(kapil).
+
+female(aastha).
+female(avadhi).
+female(teena).
+female(pushpa).
+female(usha).
+female(mamata).
+female(devi).
+female(madhur).
+female(anshu).
+female(akshara).
+female(avanya).
+
+% Define parent relationships
+parent(roshan, aastha).
+parent(roshan, avadhi).
+parent(teena, aastha).
+parent(teena, avadhi).
+
+parent(mahendra, aashish).
+parent(mahendra, akshat).
+parent(usha, aashish).
+parent(usha, akshat).
+
+parent(rajesh, akash).
+parent(rajesh, akshara).
+parent(mamata, akash).
+parent(mamata, akshara).
+
+parent(pushpa, sachin).
+parent(pushpa, chirag).
+parent(pushpa, kapil).
+parent(ganesh, sachin).
+parent(ganesh, chirag).
+parent(ganesh, kapil).
+
+parent(akshat, avanya).
+parent(anshu, avanya).
+parent(devi, roshan).
+
+parent(devi, mahendra).
+parent(devi, rajesh).
+parent(devi, pushpa).
+
+% Define marriage relationships
+married(roshan, teena).
+married(teena, roshan).
+married(mahendra, usha).
+married(usha, mahendra).
+married(rajesh, mamata).
+married(mamata, rajesh).
+married(pushpa, ganesh).
+married(ganesh, pushpa).
+married(aashish, madhur).
+married(madhur, aashish).
+married(akshat, anshu).
+married(anshu, akshat).
+married(akshara, saurabh).
+married(saurabh, akshara).
+
+
+
+% Define helpful rules
+father(X, Y) :- male(X), parent(X, Y).
+mother(X, Y) :- female(X), parent(X, Y).
+child(X, Y) :- parent(Y, X).
+son(X, Y) :- male(X), child(X, Y).
+daughter(X, Y) :- female(X), child(X, Y).
+
+% Sibling relationships
+sibling(X, Y) :- parent(Z, X), parent(Z, Y), X \= Y.
+brother(X, Y) :- male(X), sibling(X, Y).
+sister(X, Y) :- female(X), sibling(X, Y).
+
+% Aunt/Uncle relationships
+aunt(X, Y) :- female(X), sibling(X, Z), parent(Z, Y).
+uncle(X, Y) :- male(X), sibling(X, Z), parent(Z, Y).
+
+% Cousin relationships
+cousin(X, Y) :- parent(Z, X), parent(W, Y), sibling(Z, W).
+
+% Grandparent relationships
+grandparent(X, Y) :- parent(X, Z), parent(Z, Y).
+grandmother(X, Y) :- female(X), grandparent(X, Y).
+grandfather(X, Y) :- male(X), grandparent(X, Y).
+
+% Niece/nephew relationships
+niece(X, Y) :- female(X), parent(Z, X), sibling(Z, Y).
+nephew(X, Y) :- male(X), parent(Z, X), sibling(Z, Y).
+
+% In-law relationships
+father_in_law(X, Y) :- male(X), parent(X, Z), married(Y, Z).
+mother_in_law(X, Y) :- female(X), parent(X, Z), married(Y, Z).
+brother_in_law(X, Y) :- male(X), sibling(X, Z), married(Y, Z).
+sister_in_law(X, Y) :- female(X), sibling(X, Z), married(Y, Z).
+
+:- initialization(main).
+
+main :-
+    read(Query1),
+    call(Query1),
+    write('Answer 1: '), write(Query1), nl,
+
+    read(Query2),
+    call(Query2),
+    write('Answer 2: '), write(Query2), nl,
+
+    read(Query3),
+    call(Query3),
+    write('Answer 3: '), write(Query3), nl,
+
+    halt.
+
+
+
+Input: 
+mother(X, avadhi).
+cousin(Y, kapil).
+grandparent(Z, akash).
+
+
+Without input: 
+% Define male and female facts
+male(roshan).
+male(mahendra).
+male(rajesh).
+male(ganesh).
+male(aashish).
+male(akshat).
+male(akash).
+male(saurabh).
+male(sachin).
+male(chirag).
+male(kapil).
+
+female(aastha).
+female(avadhi).
+female(teena).
+female(pushpa).
+female(usha).
+female(mamata).
+female(devi).
+female(madhur).
+female(anshu).
+female(akshara).
+female(avanya).
+
+% Define parent relationships
+parent(roshan, aastha).
+parent(roshan, avadhi).
+parent(teena, aastha).
+parent(teena, avadhi).
+
+parent(mahendra, aashish).
+parent(mahendra, akshat).
+parent(usha, aashish).
+parent(usha, akshat).
+
+parent(rajesh, akash).
+parent(rajesh, akshara).
+parent(mamata, akash).
+parent(mamata, akshara).
+
+parent(pushpa, sachin).
+parent(pushpa, chirag).
+parent(pushpa, kapil).
+parent(ganesh, sachin).
+parent(ganesh, chirag).
+parent(ganesh, kapil).
+
+parent(akshat, avanya).
+parent(anshu, avanya).
+parent(devi, roshan).
+
+parent(devi, mahendra).
+parent(devi, rajesh).
+parent(devi, pushpa).
+
+% Define marriage relationships
+married(roshan, teena).
+married(teena, roshan).
+married(mahendra, usha).
+married(usha, mahendra).
+married(rajesh, mamata).
+married(mamata, rajesh).
+married(pushpa, ganesh).
+married(ganesh, pushpa).
+married(aashish, madhur).
+married(madhur, aashish).
+married(akshat, anshu).
+married(anshu, akshat).
+married(akshara, saurabh).
+married(saurabh, akshara).
+
+
+
+% Define helpful rules
+father(X, Y) :- male(X), parent(X, Y).
+mother(X, Y) :- female(X), parent(X, Y).
+child(X, Y) :- parent(Y, X).
+son(X, Y) :- male(X), child(X, Y).
+daughter(X, Y) :- female(X), child(X, Y).
+
+% Sibling relationships
+sibling(X, Y) :- parent(Z, X), parent(Z, Y), X \= Y.
+brother(X, Y) :- male(X), sibling(X, Y).
+sister(X, Y) :- female(X), sibling(X, Y).
+
+% Aunt/Uncle relationships
+aunt(X, Y) :- female(X), sibling(X, Z), parent(Z, Y).
+uncle(X, Y) :- male(X), sibling(X, Z), parent(Z, Y).
+
+% Cousin relationships
+cousin(X, Y) :- parent(Z, X), parent(W, Y), sibling(Z, W).
+
+% Grandparent relationships
+grandparent(X, Y) :- parent(X, Z), parent(Z, Y).
+grandmother(X, Y) :- female(X), grandparent(X, Y).
+grandfather(X, Y) :- male(X), grandparent(X, Y).
+
+% Niece/nephew relationships
+niece(X, Y) :- female(X), parent(Z, X), sibling(Z, Y).
+nephew(X, Y) :- male(X), parent(Z, X), sibling(Z, Y).
+
+% In-law relationships
+father_in_law(X, Y) :- male(X), parent(X, Z), married(Y, Z).
+mother_in_law(X, Y) :- female(X), parent(X, Z), married(Y, Z).
+brother_in_law(X, Y) :- male(X), sibling(X, Z), married(Y, Z).
+sister_in_law(X, Y) :- female(X), sibling(X, Z), married(Y, Z).
+
+:- initialization(main).
+
+main :-
+    mother(X, avadhi),
+    write('Mother of Avadhi: '), write(X), nl,
+
+    cousin(Y, kapil),
+    write('Cousin of Kapil: '), write(Y), nl,
+
+    grandparent(Z, akash),
+    write('Grandparent of Akash: '), write(Z), nl,
+
+    halt.
+
+
+Find all relations:
+ main :-
+    % Get all cousins of Kapil
+    findall(X, cousin(X, kapil), Cousins),
+    write('Cousins of Kapil: '), write(Cousins), nl,
+
+    % Get all aunts of Akash
+    findall(X, aunt(X, akash), Aunts),
+    write('Aunts of Akash: '), write(Aunts), nl,
+
+    % Get all grandparents of Akash
+    findall(X, grandparent(X, akash), Grandparents),
+    write('Grandparents of Akash: '), write(Grandparents), nl,
+
+    halt.
