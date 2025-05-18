@@ -1,0 +1,205 @@
+% Knowledge base: book(Title, Genre, Length, Author)
+
+book('Dune', sci_fi, long, 'Frank Herbert').
+book('Neuromancer', sci_fi, short, 'William Gibson').
+book('Foundation', sci_fi, long, 'Isaac Asimov').
+book('Hyperion', sci_fi, long, 'Dan Simmons').
+book('Snow Crash', sci_fi, short, 'Neal Stephenson').
+
+book('Pride and Prejudice', romance, long, 'Jane Austen').
+book('Me Before You', romance, long, 'Jojo Moyes').
+book('The Notebook', romance, short, 'Nicholas Sparks').
+book('Twilight', romance, long, 'Stephenie Meyer').
+book('Outlander', romance, long, 'Diana Gabaldon').
+
+book('The Hobbit', fantasy, short, 'J.R.R. Tolkien').
+book('Harry Potter and the Sorcerer\'s Stone', fantasy, long, 'J.K. Rowling').
+book('The Name of the Wind', fantasy, long, 'Patrick Rothfuss').
+book('Mistborn', fantasy, long, 'Brandon Sanderson').
+book('Eragon', fantasy, long, 'Christopher Paolini').
+
+book('The Da Vinci Code', mystery, long, 'Dan Brown').
+book('Gone Girl', mystery, long, 'Gillian Flynn').
+book('The Girl with the Dragon Tattoo', mystery, long, 'Stieg Larsson').
+book('Sherlock Holmes: A Study in Scarlet', mystery, short, 'Arthur Conan Doyle').
+book('Big Little Lies', mystery, long, 'Liane Moriarty').
+
+book('1984', drama, short, 'George Orwell').
+book('To Kill a Mockingbird', drama, long, 'Harper Lee').
+book('The Great Gatsby', drama, short, 'F. Scott Fitzgerald').
+book('The Catcher in the Rye', drama, short, 'J.D. Salinger').
+book('The Road', drama, short, 'Cormac McCarthy').
+
+book('Charlotte\'s Web', children, short, 'E.B. White').
+book('Matilda', children, short, 'Roald Dahl').
+book('Harry Potter and the Chamber of Secrets', children, long, 'J.K. Rowling').
+book('The Lion, the Witch and the Wardrobe', children, short, 'C.S. Lewis').
+book('Percy Jackson: The Lightning Thief', children, long, 'Rick Riordan').
+
+book('Educated', biography, long, 'Tara Westover').
+book('Steve Jobs', biography, long, 'Walter Isaacson').
+book('Becoming', biography, long, 'Michelle Obama').
+book('The Diary of a Young Girl', biography, short, 'Anne Frank').
+book('Long Walk to Freedom', biography, long, 'Nelson Mandela').
+
+book('The Lean Startup', business, short, 'Eric Ries').
+book('Rich Dad Poor Dad', business, short, 'Robert Kiyosaki').
+book('The 7 Habits of Highly Effective People', business, long, 'Stephen R. Covey').
+book('Thinking, Fast and Slow', business, long, 'Daniel Kahneman').
+book('Zero to One', business, short, 'Peter Thiel').
+
+book('Sapiens', history, long, 'Yuval Noah Harari').
+book('Guns, Germs, and Steel', history, long, 'Jared Diamond').
+book('A People’s History of the United States', history, long, 'Howard Zinn').
+book('The Silk Roads', history, long, 'Peter Frankopan').
+book('1776', history, short, 'David McCullough').
+
+book('Cosmos', science, long, 'Carl Sagan').
+book('A Brief History of Time', science, short, 'Stephen Hawking').
+book('The Selfish Gene', science, long, 'Richard Dawkins').
+book('The Gene: An Intimate History', science, long, 'Siddhartha Mukherjee').
+book('Astrophysics for People in a Hurry', science, short, 'Neil deGrasse Tyson').
+
+% Start interaction
+:- initialization(main).
+
+main :-
+    write('Welcome to the Book Recommendation Expert System!'), nl,
+
+    write('Enter preferred genre (e.g., fantasy, sci_fi, romance, mystery, drama, children): '),
+    read(Genre),
+
+    write('Do you want a short or long book? (short/long): '),
+    read(Length),
+
+    write('Do you have a favorite author? Type the name in single quotes or type no: '),
+    read(FavAuthor),
+
+    find_books(Genre, Length, FavAuthor, Recommendations),
+    nl, write('Here are some books we recommend:'), nl,
+    display_recommendations(Recommendations),
+    halt.
+
+% Find books based on genre, length, and optional author
+find_books(Genre, Length, no, Recommendations) :-
+    findall(Title, book(Title, Genre, Length, _), Recommendations).
+find_books(Genre, Length, FavAuthor, Recommendations) :-
+    findall(Title, book(Title, Genre, Length, FavAuthor), Recommendations).
+
+display_recommendations(Recommendations) :-
+    (   Recommendations == []
+    ->  write('Sorry, no matching books found.'), nl
+    ;   print_recommendations(Recommendations)
+    ).
+
+print_recommendations([]).
+print_recommendations([H|T]) :-
+    write('- '), write(H), nl,
+    print_recommendations(T).
+
+
+
+% Book facts: book(Title, Author, Genre, Length, Audience)
+
+book('Harry Potter and the Sorcerer''s Stone', 'J.K. Rowling', fantasy, medium, young_adult).
+book('Harry Potter and the Chamber of Secrets', 'J.K. Rowling', fantasy, medium, young_adult).
+book('Harry Potter and the Prisoner of Azkaban', 'J.K. Rowling', fantasy, medium, young_adult).
+book('The Hobbit', 'J.R.R. Tolkien', fantasy, medium, children).
+book('The Fellowship of the Ring', 'J.R.R. Tolkien', fantasy, long, adult).
+book('The Two Towers', 'J.R.R. Tolkien', fantasy, long, adult).
+book('The Return of the King', 'J.R.R. Tolkien', fantasy, long, adult).
+book('A Game of Thrones', 'George R.R. Martin', fantasy, long, adult).
+book('A Clash of Kings', 'George R.R. Martin', fantasy, long, adult).
+book('A Storm of Swords', 'George R.R. Martin', fantasy, long, adult).
+book('1984', 'George Orwell', sci_fi, medium, adult).
+book('Brave New World', 'Aldous Huxley', sci_fi, medium, adult).
+book('Fahrenheit 451', 'Ray Bradbury', sci_fi, short, adult).
+book('Ender''s Game', 'Orson Scott Card', sci_fi, medium, young_adult).
+book('Dune', 'Frank Herbert', sci_fi, long, adult).
+book('Neuromancer', 'William Gibson', sci_fi, medium, adult).
+book('The Martian', 'Andy Weir', sci_fi, medium, adult).
+book('Pride and Prejudice', 'Jane Austen', romance, medium, adult).
+book('Sense and Sensibility', 'Jane Austen', romance, medium, adult).
+book('Emma', 'Jane Austen', romance, long, adult).
+book('Me Before You', 'Jojo Moyes', romance, medium, adult).
+book('The Fault in Our Stars', 'John Green', romance, medium, young_adult).
+book('Paper Towns', 'John Green', romance, medium, young_adult).
+book('Looking for Alaska', 'John Green', romance, medium, young_adult).
+book('To Kill a Mockingbird', 'Harper Lee', drama, medium, young_adult).
+book('The Great Gatsby', 'F. Scott Fitzgerald', drama, short, adult).
+book('Of Mice and Men', 'John Steinbeck', drama, short, adult).
+book('The Catcher in the Rye', 'J.D. Salinger', drama, medium, young_adult).
+book('Gone Girl', 'Gillian Flynn', mystery, medium, adult).
+book('The Girl on the Train', 'Paula Hawkins', mystery, medium, adult).
+book('Sherlock Holmes: A Study in Scarlet', 'Arthur Conan Doyle', mystery, short, adult).
+book('The Da Vinci Code', 'Dan Brown', mystery, long, adult).
+book('Angels & Demons', 'Dan Brown', mystery, long, adult).
+book('Inferno', 'Dan Brown', mystery, long, adult).
+book('Twilight', 'Stephenie Meyer', fantasy, medium, young_adult).
+book('New Moon', 'Stephenie Meyer', fantasy, medium, young_adult).
+book('Eclipse', 'Stephenie Meyer', fantasy, medium, young_adult).
+book('Breaking Dawn', 'Stephenie Meyer', fantasy, long, young_adult).
+book('The Lightning Thief', 'Rick Riordan', fantasy, medium, young_adult).
+book('The Sea of Monsters', 'Rick Riordan', fantasy, medium, young_adult).
+book('The Titan''s Curse', 'Rick Riordan', fantasy, medium, young_adult).
+book('The Maze Runner', 'James Dashner', sci_fi, medium, young_adult).
+book('The Scorch Trials', 'James Dashner', sci_fi, medium, young_adult).
+book('The Death Cure', 'James Dashner', sci_fi, medium, young_adult).
+book('Divergent', 'Veronica Roth', sci_fi, medium, young_adult).
+book('Insurgent', 'Veronica Roth', sci_fi, medium, young_adult).
+book('Allegiant', 'Veronica Roth', sci_fi, medium, young_adult).
+book('Matilda', 'Roald Dahl', children, short, children).
+book('Charlie and the Chocolate Factory', 'Roald Dahl', children, short, children).
+book('The BFG', 'Roald Dahl', children, short, children).
+book('Coraline', 'Neil Gaiman', fantasy, short, children).
+book('The Graveyard Book', 'Neil Gaiman', fantasy, medium, children).
+
+% =========================
+% Expert System Rules
+% =========================
+
+% Recommend books by genre
+recommend_by_genre(Genre, Book) :-
+    book(Book, _, Genre, _, _).
+
+% Recommend books by author
+recommend_by_author(Author, Book) :-
+    book(Book, Author, _, _, _).
+
+% Recommend books by target audience
+recommend_by_audience(Audience, Book) :-
+    book(Book, _, _, _, Audience).
+
+% Recommend short books for busy people
+recommend_short_books(Book) :-
+    book(Book, _, _, short, _).
+
+% Recommend long books for avid readers
+recommend_long_books(Book) :-
+    book(Book, _, _, long, _).
+
+% Recommend books by multiple filters
+recommend(Book, Genre, Length, Audience) :-
+    book(Book, _, Genre, Length, Audience).
+
+
+:- initialization(main).
+
+main :-
+    write('Fantasy books:'), nl,
+    forall(recommend_by_genre(fantasy, B), (write('- '), write(B), nl)),
+
+    nl, write('Books by J.K. Rowling:'), nl,
+    forall(recommend_by_author('J.K. Rowling', B), (write('- '), write(B), nl)),
+
+    nl, write('Books for young adults:'), nl,
+    forall(recommend_by_audience(young_adult, B), (write('- '), write(B), nl)),
+
+    nl, write('Short books recommended:'), nl,
+    forall(recommend_short_books(B), (write('- '), write(B), nl)),
+
+    nl, write('Long books for avid readers:'), nl,
+    forall(recommend_long_books(B), (write('- '), write(B), nl)),
+
+    nl, halt.
+
