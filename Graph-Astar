@@ -1,0 +1,72 @@
+i import java.util.*;
+
+public class Main {
+    public static void main(String[] args) {
+        int V = 6;
+        ArrayList<int[]>[] graph = new ArrayList[V];
+        int[][] edges = {
+                { 0, 1, 2 },
+                { 0, 3, 6 },
+                { 1, 2, 5 },
+                { 2, 3, 7 },
+                { 2, 4, 6 },
+                { 2, 5, 9 },
+                { 3, 4, 10 },
+                { 4, 5, 6 }
+        };
+
+        int[] heuristic = { 20, 16, 6, 10, 4, 0 };
+        for (int i = 0; i < V; i++) {
+            graph[i] = new ArrayList<>();
+        }
+        for (int[] edge : edges) {
+            graph[edge[0]].add(new int[]{edge[1], edge[2]});
+            graph[edge[1]].add(new int[]{edge[0], edge[2]});
+        }
+
+        int src = 0, dest = 5;
+        boolean[] vis = new boolean[V];
+        int[] dist = new int[V];
+        int[] parent = new int[V];
+        Arrays.fill(dist, Integer.MAX_VALUE);
+        Arrays.fill(parent, -1);
+        dist[src] = 0;
+
+        PriorityQueue<int[]> pq = new PriorityQueue<>(Comparator.comparingInt(a -> a[1]));
+        pq.add(new int[]{src, heuristic[src]});
+
+        while (!pq.isEmpty()) {
+            int[] curr = pq.poll();
+            int node = curr[0];
+
+            if (node == dest) break;
+            if (vis[node]) continue;
+            vis[node] = true;
+
+            for (int[] neighbor : graph[node]) {
+                int next = neighbor[0], weight = neighbor[1];
+                if (!vis[next] && dist[node] + weight < dist[next]) {
+                    dist[next] = dist[node] + weight;
+                    parent[next] = node;
+                    pq.add(new int[]{next, dist[next] + heuristic[next]});
+                }
+            }
+        }
+
+        System.out.println("Distance to goal node " + dest + " : " + dist[dest]);
+
+        List<Integer> path = new ArrayList<>();
+        for (int at = dest; at != -1; at = parent[at]) {
+            path.add(at);
+        }
+        Collections.reverse(path);
+
+        System.out.print("Path from " + src + " to " + dest + " : ");
+        for (int i = 0; i < path.size(); i++) {
+            if (i > 0) System.out.print(" -> ");
+            System.out.print(path.get(i));
+        }
+        System.out.println();
+    }
+}
+
