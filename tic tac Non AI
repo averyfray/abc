@@ -1,0 +1,186 @@
+import java.util.*;
+
+public class TicTacToe {
+    static int brk = 0;
+    static char[] row1 = {'_', '_', '_'};
+    static char[] row2 = {'_', '_', '_'};
+    static char[] row3 = {'_', '_', '_'};
+
+    static boolean tryWin(char[] chars) {
+        if (chars[0] == 'X' && chars[1] == 'X' && chars[2] == 'X') {
+            System.out.println("You win!");
+            brk = 1;
+            return true;
+        }
+        if (chars[0] == 'O' && chars[1] == 'O' && chars[2] == 'O') {
+            System.out.println("Computer wins!");
+            brk = 1;
+            return true;
+        }
+
+        // Winning move for computer
+        if (chars[0] == 'O' && chars[1] == 'O' && chars[2] == '_') {
+            chars[2] = 'O';
+            System.out.println("Computer wins!");
+            brk = 1;
+            return true;
+        }
+        if (chars[0] == 'O' && chars[1] == '_' && chars[2] == 'O') {
+            chars[1] = 'O';
+            System.out.println("Computer wins!");
+            brk = 1;
+            return true;
+        }
+        if (chars[0] == '_' && chars[1] == 'O' && chars[2] == 'O') {
+            chars[0] = 'O';
+            System.out.println("Computer wins!");
+            brk = 1;
+            return true;
+        }
+
+        // Blocking move
+        if (chars[0] == 'X' && chars[1] == 'X' && chars[2] == '_') {
+            chars[2] = 'O';
+            return true;
+        }
+        if (chars[0] == 'X' && chars[1] == '_' && chars[2] == 'X') {
+            chars[1] = 'O';
+            return true;
+        }
+        if (chars[0] == '_' && chars[1] == 'X' && chars[2] == 'X') {
+            chars[0] = 'O';
+            return true;
+        }
+
+        return false;
+    }
+
+    static void analyse() {
+    boolean win;
+
+    // Rows
+    if (tryRow(row1) == 1) return;
+    if (tryRow(row2) == 1) return;
+    if (tryRow(row3) == 1) return;
+
+    // Columns
+    char[] col1 = {row1[0], row2[0], row3[0]};
+    win = tryWin(col1);
+    if (win) {
+        row1[0] = col1[0];
+        row2[0] = col1[1];
+        row3[0] = col1[2];
+        return;
+    }
+
+    char[] col2 = {row1[1], row2[1], row3[1]};
+    win = tryWin(col2);
+    if (win) {
+        row1[1] = col2[0];
+        row2[1] = col2[1];
+        row3[1] = col2[2];
+        return;
+    }
+
+    char[] col3 = {row1[2], row2[2], row3[2]};
+    win = tryWin(col3);
+    if (win) {
+        row1[2] = col3[0];
+        row2[2] = col3[1];
+        row3[2] = col3[2];
+        return;
+    }
+
+    // Diagonals
+    char[] diag1 = {row1[0], row2[1], row3[2]};
+    win = tryWin(diag1);
+    if (win) {
+        row1[0] = diag1[0];
+        row2[1] = diag1[1];
+        row3[2] = diag1[2];
+        return;
+    }
+
+    char[] diag2 = {row1[2], row2[1], row3[0]};
+    win = tryWin(diag2);
+    if (win) {
+        row1[2] = diag2[0];
+        row2[1] = diag2[1];
+        row3[0] = diag2[2];
+        return;
+    }
+
+    // Default best move
+    if (row2[1] == '_') row2[1] = 'O';
+    else if (row1[0] == '_') row1[0] = 'O';
+    else if (row1[2] == '_') row1[2] = 'O';
+    else if (row3[2] == '_') row3[2] = 'O';
+    else if (row3[0] == '_') row3[0] = 'O';
+    else if (row3[1] == '_') row3[1] = 'O';
+    else if (row1[1] == '_') row1[1] = 'O';
+    else if (row2[0] == '_') row2[0] = 'O';
+    else if (row2[2] == '_') row2[2] = 'O';
+}
+
+
+    static int tryRow(char[] row) {
+        char[] temp = row.clone();
+        boolean win = tryWin(temp);
+        if (win) {
+            System.arraycopy(temp, 0, row, 0, 3);
+            return 1;
+        }
+        return 0;
+    }
+
+    static void display() {
+        for (char c : row1) System.out.print(c + " ");
+        System.out.println();
+        for (char c : row2) System.out.print(c + " ");
+        System.out.println();
+        for (char c : row3) System.out.print(c + " ");
+        System.out.println();
+    }
+
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        int moveCount = 0;
+
+        System.out.println("Play your move by entering numbers between 1 to 9");
+        System.out.println("1 -> top left corner and 9 -> bottom right corner");
+        System.out.println("1 2 3\n4 5 6\n7 8 9");
+
+        System.out.print("Do you want to play first [y/n]? ");
+        char playFirst = sc.next().charAt(0);
+
+        if (playFirst == 'n') {
+            System.out.println("Computer's move ....");
+            analyse();
+            display();
+            moveCount++;
+        }
+
+        while (moveCount < 9) {
+            System.out.println("Play move ...");
+            int move = sc.nextInt();
+
+            if (move <= 3) row1[move - 1] = 'X';
+            else if (move <= 6) row2[move - 4] = 'X';
+            else row3[move - 7] = 'X';
+
+            moveCount++;
+            if (brk == 1 || moveCount == 9) break;
+
+            display();
+
+            System.out.println("Computer's move ....");
+            analyse();
+            display();
+            moveCount++;
+            if (brk == 1) break;
+        }
+
+        if (brk == 0) System.out.println("Game Over. It's a draw!");
+    }
+}
+
