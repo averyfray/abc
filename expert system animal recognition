@@ -1,0 +1,143 @@
+% Facts about animals (for reference, not used directly here)
+has_wings(bird).
+has_wings(bat).
+
+has_legs(bird, 2).
+has_legs(dog, 4).
+has_legs(cat, 4).
+has_legs(spider, 8).
+has_legs(human, 2).
+has_legs(deer, 4).
+has_legs(cow, 4).
+has_legs(elephant, 4).
+has_legs(zebra, 4).
+has_legs(monkey, 2).
+has_legs(kangaroo, 2).
+
+has_antlers(deer).
+has_horns(cow).
+has_trunk(elephant).
+has_stripes(zebra).
+has_fur(dog).
+has_fur(cat).
+has_feathers(bird).
+has_tail(monkey).
+has_pouch(kangaroo).
+can_fly(bird).
+can_fly(bat).
+
+% ask/2 - Ask a yes/no question and bind Answer to true/false
+ask(Question, Answer) :-
+    write(Question), write(' (yes/no): '), nl,
+    read(Response),
+    (Response == yes ; Response == y -> Answer = true ; Answer = false).
+
+% identify/14 - identify animal from answers
+identify(true, true, true, _, _, _, _, _, _, _, _, _, _, bird) :- !.
+identify(true, true, false, _, _, _, _, _, _, _, _, _, _, bat) :- !.
+identify(_, _, _, true, true, _, _, _, _, _, _, _, _, deer) :- !.
+identify(_, _, _, true, false, true, _, _, _, _, _, _, _, cow) :- !.
+identify(_, _, _, true, false, false, true, _, _, _, _, _, _, dog_or_cat) :- !.
+identify(_, _, _, true, false, false, false, true, _, _, _, _, _, zebra) :- !.
+identify(_, _, _, true, false, false, false, false, true, _, _, _, _, elephant) :- !.
+identify(_, _, _, _, false, false, false, false, false, true, true, _, _, monkey) :- !.
+identify(_, _, _, _, false, false, false, false, false, true, false, true, _, kangaroo) :- !.
+identify(_, _, _, false, false, false, false, false, false, false, false, false, true, spider) :- !.
+identify(_, _, _, _, _, _, _, _, _, _, _, _, _, unknown).
+:- initialization(main).
+
+% main predicate to start the program
+main :-
+    write('Welcome to the Animal Expert System!'), nl,
+    ask('Does the animal have wings?', Wings), 
+    ask('Can the animal fly?', CanFly), 
+    ask('Does the animal have feathers?', Feathers),
+    ask('Does the animal have 4 legs?', FourLegs),
+    ask('Does the animal have antlers?', Antlers), 
+    ask('Does the animal have horns?', Horns), 
+    ask('Does the animal have fur?', Fur), 
+    ask('Does the animal have stripes?', Stripes),
+    ask('Does the animal have a trunk?', Trunk), 
+    ask('Does the animal have 2 legs?', TwoLegs), 
+    ask('Does the animal have a tail?', Tail), 
+    ask('Does the animal have a pouch?', Pouch), 
+    ask('Does the animal have 8 legs?', EightLegs), 
+
+    identify(Wings, CanFly, Feathers, FourLegs, Antlers, Horns, Fur, Stripes, Trunk, TwoLegs, Tail, Pouch, EightLegs, Animal),
+
+    write('Based on your answers, the animal is likely: '), write(Animal), nl.
+
+
+
+
+
+
+2nd : 
+% Expert system to identify an animal
+
+identify_animal :-
+    write('Answer the following questions with yes or no.'), nl,
+    (has_feathers -> bird;
+     has_fur -> mammal;
+     has_scales -> reptile;
+     has_fins -> fish;
+     write('Animal not identified.'), nl).
+
+% Bird rules
+bird :-
+    (can_fly -> write('It is a bird that can fly.'), nl;
+     write('It is a bird that cannot fly.'), nl).
+
+% Mammal rules
+mammal :-
+    (is_carnivore -> write('It is a carnivorous mammal.'), nl;
+     is_herbivore -> write('It is a herbivorous mammal.'), nl;
+     write('It is a mammal.'), nl).
+
+% Reptile rules
+reptile :-
+    (is_venomous -> write('It is a venomous reptile.'), nl;
+     write('It is a non-venomous reptile.'), nl).
+
+% Fish rules
+fish :-
+    (is_freshwater -> write('It is a freshwater fish.'), nl;
+     write('It is a saltwater fish.'), nl).
+
+% Questions
+
+has_feathers :-
+    ask('Does the animal have feathers?').
+
+has_fur :-
+    ask('Does the animal have fur?').
+
+has_scales :-
+    ask('Does the animal have scales?').
+
+has_fins :-
+    ask('Does the animal have fins?').
+
+can_fly :-
+    ask('Can it fly?').
+
+is_carnivore :-
+    ask('Is it a carnivore?').
+
+is_herbivore :-
+    ask('Is it a herbivore?').
+
+is_venomous :-
+    ask('Is it venomous?').
+
+is_freshwater :-
+    ask('Does it live in freshwater?').
+
+% Helper predicate to ask questions
+ask(Question) :-
+    write(Question), write(' (yes/no) '),
+    read(Response),
+    Response == yes.
+
+% Run identify_animal automatically when file is loaded
+:- initialization(identify_animal).
