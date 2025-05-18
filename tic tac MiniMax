@@ -1,0 +1,137 @@
+import java.util.*;
+
+public class TicTacToeAI {
+    static String[][] board = {
+        {"", "", ""},
+        {"", "", ""},
+        {"", "", ""}
+    };
+    
+    static String ai = "X";
+    static String player = "O";
+
+    static int[] bestMove() {
+        int bestScore = Integer.MIN_VALUE;
+        int[] move = {-1, -1};
+
+        for (int i = 0; i < 3; i++) {
+            for (int j = 0; j < 3; j++) {
+                if (board[i][j].equals("")) {
+                    board[i][j] = ai;
+                    int score = minimax(board, 0, false);
+                    board[i][j] = "";
+
+                    if (score > bestScore) {
+                        bestScore = score;
+                        move[0] = i;
+                        move[1] = j;
+                    }
+                }
+            }
+        }
+
+        return move;
+    }
+
+    static int minimax(String[][] board, int depth, boolean isMaximizing) {
+        String result = checkWinner();
+        if (result != null) {
+            return score(result);
+        }
+
+        if (isMaximizing) {
+            int bestScore = Integer.MIN_VALUE;
+            for (int i = 0; i < 3; i++) {
+                for (int j = 0; j < 3; j++) {
+                    if (board[i][j].equals("")) {
+                        board[i][j] = ai;
+                        int score = minimax(board, depth + 1, false);
+                        board[i][j] = "";
+                        bestScore = Math.max(score, bestScore);
+                    }
+                }
+            }
+            return bestScore;
+        } else {
+            int worstScore = Integer.MAX_VALUE;
+            for (int i = 0; i < 3; i++) {
+                for (int j = 0; j < 3; j++) {
+                    if (board[i][j].equals("")) {
+                        board[i][j] = player;
+                        int score = minimax(board, depth + 1, true);
+                        board[i][j] = "";
+                        worstScore = Math.min(score, worstScore);
+                    }
+                }
+            }
+            return worstScore;
+        }
+    }
+
+    static int score(String winner) {
+        if (winner.equals(ai)) return 10;
+        if (winner.equals(player)) return -10;
+        return 0;
+    }
+
+    static String checkWinner() {
+        // Rows & Columns
+        for (int i = 0; i < 3; i++) {
+            if (!board[i][0].equals("") &&
+                board[i][0].equals(board[i][1]) &&
+                board[i][1].equals(board[i][2]))
+                return board[i][0];
+
+            if (!board[0][i].equals("") &&
+                board[0][i].equals(board[1][i]) &&
+                board[1][i].equals(board[2][i]))
+                return board[0][i];
+        }
+
+        // Diagonals
+        if (!board[0][0].equals("") &&
+            board[0][0].equals(board[1][1]) &&
+            board[1][1].equals(board[2][2]))
+            return board[0][0];
+
+        if (!board[2][0].equals("") &&
+            board[2][0].equals(board[1][1]) &&
+            board[1][1].equals(board[0][2]))
+            return board[2][0];
+
+        // Tie
+        boolean openSpot = false;
+        for (String[] row : board)
+            for (String cell : row)
+                if (cell.equals("")) openSpot = true;
+
+        return openSpot ? null : "tie";
+    }
+
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+
+        while (checkWinner() == null) {
+            // Display board
+            for (String[] row : board) {
+                System.out.println(Arrays.toString(row));
+            }
+
+            // Player turn
+            System.out.println("Enter your move (row and col): ");
+            int r = sc.nextInt();
+            int c = sc.nextInt();
+            if (board[r][c].equals("")) {
+                board[r][c] = player;
+            }
+
+            // AI turn
+            if (checkWinner() == null) {
+                int[] move = bestMove();
+                board[move[0]][move[1]] = ai;
+            }
+        }
+
+        System.out.println("Game Over: " + checkWinner());
+    }
+}
