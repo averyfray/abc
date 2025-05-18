@@ -1,0 +1,88 @@
+Best first Search
+Code: 
+import java.util.*;
+
+public class Main {
+    public static void main(String[] args) {
+        int V = 6;
+        ArrayList<int[]>[] graph = new ArrayList[V];
+        int[][] edges = {
+                { 0, 1, 2 },
+                { 0, 3, 6 },
+                { 1, 2, 5 },
+                { 2, 3, 7 },
+                { 2, 4, 6 },
+                { 2, 5, 9 },
+                { 3, 4, 10 },
+                { 4, 5, 6 }
+        };
+
+        int[] heuristic = { 20, 16, 6, 10, 4, 0 }; 
+
+        
+        for (int i = 0; i < V; i++) {
+            graph[i] = new ArrayList<>();
+        }
+        
+        for (int[] edge : edges) {
+            graph[edge[0]].add(new int[]{edge[1], edge[2]}); // to node, weight
+            graph[edge[1]].add(new int[]{edge[0], edge[2]});
+        }
+
+        int src = 0, dest = 5;
+
+               PriorityQueue<int[]> pq = new PriorityQueue<>(Comparator.comparingInt(a -> a[1])); // {node, heuristic}
+        pq.add(new int[]{src, heuristic[src]});
+
+        
+        boolean[] visited = new boolean[V];
+        Arrays.fill(visited, false);
+
+        
+        int[] parent = new int[V];
+        Arrays.fill(parent, -1); // Initialize with no parent
+
+        boolean found = false;
+        while (!pq.isEmpty()) {
+            int[] current = pq.poll();
+            int node = current[0];
+
+            if (node == dest) {
+                found = true;
+                break; // Goal found
+            }
+
+            if (visited[node]) continue; 
+            visited[node] = true;
+
+            
+            for (int[] neighbor : graph[node]) {
+                int nextNode = neighbor[0];
+                //int weight = neighbor[1];  // Weight is not used in BFS
+
+                if (!visited[nextNode]) {
+                    pq.add(new int[]{nextNode, heuristic[nextNode]}); // Add neighbor to queue (heuristic only)
+                    parent[nextNode] = node; // Update parent for path reconstruction
+                }
+            }
+        }
+
+        if (found) {
+            System.out.println("Goal node " + dest + " found!");
+            List<Integer> path = new ArrayList<>();
+            for (int i = dest; i != -1; i = parent[i]) {
+                path.add(i);
+            }
+            Collections.reverse(path);
+
+            System.out.print("Path: ");
+            for (int i = 0; i < path.size(); i++) {
+                System.out.print(path.get(i) + (i == path.size() - 1 ? "" : " -> "));
+            }
+            System.out.println();
+
+        } else {
+            System.out.println("Goal node " + dest + " not found.");
+        }
+    }
+}
