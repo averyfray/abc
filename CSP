@@ -1,9 +1,6 @@
-i public class CryptarithmeticCSP{
+import java.util.*;
 
-    public static void main(String[] args) {
-     import java.util.*;
-
-public class Main {
+public class CryptarithmeticCSP {
 
     public static void main(String[] args) {
         String letters = "CATDOGPE";
@@ -45,7 +42,4 @@ public class Main {
             Collections.swap(digits, i, index); // backtrack
         }
     }
-}
-    
-
 }
