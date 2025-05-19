@@ -1,0 +1,81 @@
+import java.util.Scanner;
+
+public class GraphColoring {
+    static final int MAX = 20;
+
+    // Function to print the final color assignment
+    static void printSolution(int[] color, int V) {
+        System.out.println("Solution Exists: Following are the assigned colors");
+        for (int i = 0; i < V; i++) {
+            System.out.println("Vertex " + i + " ---> Color " + color[i]);
+        }
+    }
+
+    // Function to check if it's safe to assign color c to vertex v
+    static boolean isSafe(int v, boolean[][] graph, int[] color, int c, int V) {
+        for (int i = 0; i < V; i++) {
+            if (graph[v][i] && color[i] == c) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    // Recursive function to assign colors to vertices
+    static boolean graphColoringUtil(boolean[][] graph, int m, int[] color, int v, int V) {
+        if (v == V)
+            return true;
+
+        for (int c = 1; c <= m; c++) {
+            if (isSafe(v, graph, color, c, V)) {
+                color[v] = c;
+
+                if (graphColoringUtil(graph, m, color, v + 1, V))
+                    return true;
+
+                color[v] = 0; // Backtrack
+            }
+        }
+
+        return false;
+    }
+
+    // Main function to solve the M-Coloring problem
+    static boolean graphColoring(boolean[][] graph, int m, int V) {
+        int[] color = new int[MAX];
+        for (int i = 0; i < V; i++)
+            color[i] = 0;
+
+        if (!graphColoringUtil(graph, m, color, 0, V)) {
+            System.out.println("Solution does not exist");
+            return false;
+        }
+
+        printSolution(color, V);
+        return true;
+    }
+
+    // Driver code
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        int V, m;
+        boolean[][] graph = new boolean[MAX][MAX];
+
+        System.out.print("Enter the number of vertices: ");
+        V = sc.nextInt();
+
+        System.out.print("Enter the number of colors: ");
+        m = sc.nextInt();
+
+        System.out.println("Enter the adjacency matrix (" + V + "x" + V + "):");
+        for (int i = 0; i < V; i++) {
+            for (int j = 0; j < V; j++) {
+                int val = sc.nextInt();
+                graph[i][j] = val != 0;
+            }
+        }
+
+        graphColoring(graph, m, V);
+        sc.close();
+    }
+}
