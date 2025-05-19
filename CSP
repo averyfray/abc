@@ -1,0 +1,51 @@
+i public class CryptarithmeticCSP{
+
+    public static void main(String[] args) {
+     import java.util.*;
+
+public class Main {
+
+    public static void main(String[] args) {
+        String letters = "CATDOGPE";
+        List<Integer> digits = new ArrayList<>();
+        for (int i = 0; i <= 9; i++) digits.add(i);
+
+        permuteAndCheck(letters.toCharArray(), digits, 0);
+    }
+
+    static void permuteAndCheck(char[] letters, List<Integer> digits, int index) {
+        if (index == letters.length) {
+            Map<Character, Integer> map = new HashMap<>();
+            for (int i = 0; i < letters.length; i++) {
+                map.put(letters[i], digits.get(i));
+            }
+
+            int c = map.get('C'), a = map.get('A'), t = map.get('T');
+            int d = map.get('D'), o = map.get('O'), g = map.get('G');
+            int p = map.get('P'), e = map.get('E');
+
+            int cat = 100 * c + 10 * a + t;
+            int dog = 100 * d + 10 * o + g;
+            int pet = 100 * p + 10 * e + t;
+
+            if (cat + dog == pet) {
+                System.out.println("Solution Found:");
+                System.out.println("C = " + c + ", A = " + a + ", T = " + t);
+                System.out.println("D = " + d + ", O = " + o + ", G = " + g);
+                System.out.println("P = " + p + ", E = " + e);
+                System.out.println("CAT + DOG = PET: " + cat + " + " + dog + " = " + pet);
+                System.exit(0); // Exit after first solution
+            }
+            return;
+        }
+
+        for (int i = index; i < digits.size(); i++) {
+            Collections.swap(digits, i, index);
+            permuteAndCheck(letters, digits, index + 1);
+            Collections.swap(digits, i, index); // backtrack
+        }
+    }
+}
+    
+
+}
